@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A private, adaptive Codeforces problem recommender." />
+    <title>Next CF Problem</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230c1020'/%3E%3Cpath d='M17 19h30v8H25v10h18v8H25v10h-8z' fill='%2376e6a8'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Adaptive practice queue</p>
+          <h1>Next CF Problem</h1>
+        </div>
+        <button id="settingsToggle" class="ghost-button" type="button" aria-expanded="true" aria-controls="setupPanel">Settings</button>
+      </header>
+
+      <section id="setupPanel" class="panel setup-panel" aria-labelledby="setupTitle">
+        <div class="section-heading">
+          <div>
+            <h2 id="setupTitle">Practice profile</h2>
+            <p>Your handle and history stay in this browser.</p>
+          </div>
+          <span id="syncBadge" class="status-badge">Not synced</span>
+        </div>
+
+        <div class="setup-grid">
+          <label>
+            <span>Codeforces handle</span>
+            <input id="handleInput" autocomplete="off" placeholder="tourist" />
+          </label>
+          <label>
+            <span>Rating override <small>(optional)</small></span>
+            <input id="ratingInput" type="number" min="0" max="4000" step="1" placeholder="Auto" />
+          </label>
+          <label>
+            <span>Lower range</span>
+            <select id="lowerDelta">
+              <option value="-500" selected>Rating − 500</option>
+              <option value="-400">Rating − 400</option>
+              <option value="-300">Rating − 300</option>
+              <option value="-200">Rating − 200</option>
+            </select>
+          </label>
+          <label>
+            <span>Maximum above rating <small>(+100 to +3000)</small></span>
+            <input id="upperDelta" type="number" min="100" max="3000" step="100" value="500" inputmode="numeric" aria-describedby="upperDeltaHelp" />
+            <small id="upperDeltaHelp" class="field-help">Sets the hardest rating allowed in your queue.</small>
+          </label>
+        </div>
+
+        <div class="mix-header">
+          <div>
+            <h3>Target mix</h3>
+            <p>The recommender uses these internally. Tags stay hidden until you record an outcome.</p>
+          </div>
+          <button id="balancedPreset" class="text-button" type="button">Reset balanced mix</button>
+        </div>
+        <div id="mixControls" class="mix-grid"></div>
+
+        <div class="setup-actions">
+          <button id="syncButton" class="primary-button" type="button">Sync Codeforces</button>
+          <p id="syncMessage" class="helper-text" role="status">Enter your handle to exclude accepted problems and fetch your current rating.</p>
+        </div>
+      </section>
+
+      <section class="workspace-grid">
+        <article class="panel recommendation-panel" aria-labelledby="recommendationTitle">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Your next problem</p>
+              <h2 id="recommendationTitle">Ready when you are</h2>
+            </div>
+            <span id="ratingBadge" class="rating-badge hidden"></span>
+          </div>
+
+          <div id="emptyState" class="empty-state">
+            <div class="empty-mark">?</div>
+            <p>Sync your handle, then let the queue choose one recent unsolved problem.</p>
+          </div>
+
+          <div id="problemCard" class="problem-card hidden">
+            <p id="problemCode" class="problem-code"></p>
+            <h3 id="problemName"></h3>
+            <p id="problemReason" class="problem-reason"></p>
+            <div class="problem-actions">
+              <a id="openProblem" class="primary-button link-button" target="_blank" rel="noopener noreferrer">Open problem</a>
+              <button id="anotherButton" class="ghost-button" type="button">Choose another</button>
+            </div>
+            <div class="outcome-block">
+              <p>Record the result when you finish</p>
+              <div class="outcome-grid">
+                <button data-outcome="solved" class="outcome-button solved" type="button">Solved solo</button>
+                <button data-outcome="hint" class="outcome-button" type="button">Needed hint</button>
+                <button data-outcome="editorial" class="outcome-button" type="button">Used editorial</button>
+                <button data-outcome="skip" class="outcome-button" type="button">Skip</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="queue-footer">
+            <span id="poolCount">0 eligible problems</span>
+            <span>Problem tags hidden before completion</span>
+          </div>
+        </article>
+
+        <aside class="panel stats-panel" aria-labelledby="statsTitle">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">Local progress</p>
+              <h2 id="statsTitle">Practice pulse</h2>
+            </div>
+          </div>
+          <div class="stats-grid">
+            <div><strong id="completedCount">0</strong><span>recorded</span></div>
+            <div><strong id="soloRate">0%</strong><span>solo solve rate</span></div>
+            <div><strong id="averageRating">—</strong><span>average rating</span></div>
+          </div>
+          <div class="last-result">
+            <span>Adaptive target</span>
+            <strong id="adaptiveTarget">Sync first</strong>
+          </div>
+          <p class="privacy-note">Codeforces data is read directly in your browser. Your practice log is stored only on this device.</p>
+        </aside>
+      </section>
+
+      <section class="panel history-panel" aria-labelledby="historyTitle">
+        <div class="section-heading">
+          <div>
+            <h2 id="historyTitle">Recent practice</h2>
+            <p>Tags appear here only after you record the result.</p>
+          </div>
+          <div class="history-actions">
+            <button id="manualToggle" class="ghost-button" type="button" aria-expanded="false" aria-controls="manualLogPanel">Log any problem</button>
+            <button id="clearHistory" class="text-button danger" type="button">Clear local history</button>
+          </div>
+        </div>
+        <div id="manualLogPanel" class="manual-log hidden">
+          <form id="manualLogForm">
+            <label class="manual-problem-field">
+              <span>Problem name, code, or URL</span>
+              <input id="manualProblemInput" autocomplete="off" placeholder="Monopati, 2163C, or a Codeforces URL" required />
+            </label>
+            <label>
+              <span>Result</span>
+              <select id="manualOutcome">
+                <option value="solved">Solved solo</option>
+                <option value="hint">Needed hint</option>
+                <option value="editorial">Used editorial</option>
+                <option value="skip">Skipped</option>
+              </select>
+            </label>
+            <label>
+              <span>Solved on <small>(optional)</small></span>
+              <input id="manualDate" type="date" />
+            </label>
+            <button id="manualSubmit" class="primary-button" type="submit">Add to history</button>
+          </form>
+          <p id="manualMessage" class="helper-text" role="status">This changes only the history stored in this browser.</p>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Problem</th><th>Rating</th><th>Result</th><th>Tags revealed</th><th>Date</th></tr>
+            </thead>
+            <tbody id="historyBody">
+              <tr class="empty-row"><td colspan="5">No practice recorded yet.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer>
+        <span>Data from the Codeforces public API</span>
+        <a href="https://codeforces.com/apiHelp" target="_blank" rel="noopener noreferrer">API reference</a>
+      </footer>
+    </main>
+
+    <script src="./app.js" defer></script>
+  </body>
+</html>
