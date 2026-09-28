@@ -1,1 +1,39 @@
-# Next CF ProblemAn adaptive Codeforces practice picker that recommends recent unsolved problems near your rating while keeping problem tags hidden until you record the result.**Public app:** [mrhello291.github.io/next-cf-problem-picker](https://mrhello291.github.io/next-cf-problem-picker/)**ChatGPT Site mirror:** [next-cf-problem-picker-hoda.hoda-asif123.chatgpt.site](https://next-cf-problem-picker-hoda.hoda-asif123.chatgpt.site)## Features- Syncs your Codeforces rating and accepted submissions in the browser.- Suggests recent unsolved problems using an adjustable rating range.- Balances greedy, graphs, dynamic programming, data structures, math, and string practice.- Records solved, hinted, editorial-assisted, and skipped outcomes.- Lets you manually add any Codeforces problem by title, contest code, or URL.- Stores the handle, settings, and practice history only in your browser's local storage.- Includes WebMCP tools for compatible browsers and agents.## Run locallyNo build step or dependencies are required.```bashpython3 -m http.server 4173 --directory dist```Then open <http://127.0.0.1:4173>.## DeployThe repository includes a GitHub Pages workflow that publishes the contents of `dist/` whenever `main` changes. Enable GitHub Pages with **GitHub Actions** as the source in the repository settings.Because the app is fully static and uses the public Codeforces API, it can also be hosted on Cloudflare Pages, Netlify, Vercel, or any ordinary static file host.## PrivacyThe app does not include a backend. Practice history and settings are saved in `localStorage`, so they remain specific to each browser and site domain. Clearing browser storage or switching domains does not transfer that history automatically.## License[MIT](LICENSE)
+# Next CF Problem
+
+An adaptive Codeforces practice picker that recommends recent unsolved problems near your rating while keeping problem tags hidden until you record the result.
+
+**Public app:** [mrhello291.github.io/next-cf-problem-picker](https://mrhello291.github.io/next-cf-problem-picker/)
+
+## Features
+
+- Syncs your Codeforces rating and accepted submissions in the browser.
+- Suggests recent unsolved problems using an adjustable rating range.
+- Balances greedy, graphs, dynamic programming, data structures, math, and string practice.
+- Records solved, hinted, editorial-assisted, and skipped outcomes.
+- Lets you manually add any Codeforces problem by title, contest code, or URL.
+- Stores the handle, settings, and practice history only in your browser's local storage.
+- Includes WebMCP tools for compatible browsers and agents.
+
+## Run locally
+
+No build step or dependencies are required.
+
+```bash
+python3 -m http.server 4173 --directory dist
+```
+
+Then open <http://127.0.0.1:4173>.
+
+## Deploy
+
+The repository includes a GitHub Pages workflow that publishes the contents of `dist/` whenever `main` changes. Enable GitHub Pages with **GitHub Actions** as the source in the repository settings.
+
+Because the app is fully static and uses the public Codeforces API, it can also be hosted on Cloudflare Pages, Netlify, Vercel, or any ordinary static file host.
+
+## Privacy
+
+The app does not include a backend. Practice history and settings are saved in `localStorage`, so they remain specific to each browser and site domain. Clearing browser storage or switching domains does not transfer that history automatically.
+
+## License
+
+[MIT](LICENSE)
