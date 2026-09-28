@@ -2,7 +2,9 @@
 
 An adaptive Codeforces practice picker that recommends recent unsolved problems near your rating while keeping problem tags hidden until you record the result.
 
-**Live app:** [next-cf-problem-picker-hoda.hoda-asif123.chatgpt.site](https://next-cf-problem-picker-hoda.hoda-asif123.chatgpt.site)
+**Public app:** [mrhello291.github.io/next-cf-problem-picker](https://mrhello291.github.io/next-cf-problem-picker/)
+
+**ChatGPT Site mirror:** [next-cf-problem-picker-hoda.hoda-asif123.chatgpt.site](https://next-cf-problem-picker-hoda.hoda-asif123.chatgpt.site)
 
 ## Features
 
